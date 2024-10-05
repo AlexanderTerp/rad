@@ -336,6 +336,9 @@ func (p *Parser) radStatement(radType RadBlockType) RadStmt {
 		if p.matchKeyword(TRUNCATE, RAD_BLOCK_KEYWORDS) {
 			mods = append(mods, p.truncStmt())
 		}
+		if p.matchKeyword(COLOR, RAD_BLOCK_KEYWORDS) {
+			mods = append(mods, p.colorStmt())
+		}
 		// todo other field mod stmts
 	}
 	return &FieldMods{Identifiers: identifiers, Mods: mods}
@@ -349,6 +352,11 @@ func (p *Parser) radStatement(radType RadBlockType) RadStmt {
 func (p *Parser) truncStmt() RadFieldModStmt {
 	truncateToken := p.previous()
 	return &Truncate{TruncToken: truncateToken, Value: p.expr(1)}
+}
+
+func (p *Parser) colorStmt() RadFieldModStmt {
+	colorToken := p.previous()
+	return &Color{ColorToken: colorToken, ColorValue: p.expr(1), Regex: p.expr(1)}
 }
 
 func (p *Parser) validateRadBlock(radBlock *RadBlock) {

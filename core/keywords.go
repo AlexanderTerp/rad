@@ -31,19 +31,18 @@ var ARGS_BLOCK_KEYWORDS = map[string]TokenType{
 }
 
 var RAD_BLOCK_KEYWORDS = map[string]TokenType{
-	"fields":    FIELDS,
-	"sort":      SORT,
-	"asc":       ASC,
-	"desc":      DESC,
-	"color":     COLOR,
-	"max_width": MAX_WIDTH,
-	"uniq":      UNIQ,
-	"quiet":     QUIET,
-	"limit":     LIMIT,
-	"table":     TABLE,
-	"default":   DEFAULT,
-	"markdown":  MARKDOWN,
-	"truncate":  TRUNCATE,
+	"fields":   FIELDS,
+	"sort":     SORT,
+	"asc":      ASC,
+	"desc":     DESC,
+	"color":    COLOR,
+	"uniq":     UNIQ,
+	"quiet":    QUIET,
+	"limit":    LIMIT,
+	"table":    TABLE,
+	"default":  DEFAULT,
+	"markdown": MARKDOWN,
+	"truncate": TRUNCATE,
 }
 
 var SWITCH_BLOCK_KEYWORDS = map[string]TokenType{

@@ -84,19 +84,18 @@ const (
 	REGEX    TokenType = "REGEX" // todo this is pretty sad to not make available for users as Flag
 
 	// only in rad block
-	FIELDS    TokenType = "FIELDS"
-	SORT      TokenType = "SORT"
-	ASC       TokenType = "ASC"
-	DESC      TokenType = "DESC"
-	COLOR     TokenType = "COLOR"
-	MAX_WIDTH TokenType = "MAX_WIDTH"
-	UNIQ      TokenType = "UNIQ"
-	QUIET     TokenType = "QUIET"
-	LIMIT     TokenType = "LIMIT"
-	TABLE     TokenType = "TABLE"
-	DEFAULT   TokenType = "DEFAULT"
-	MARKDOWN  TokenType = "MARKDOWN"
-	TRUNCATE  TokenType = "TRUNCATE"
+	FIELDS   TokenType = "FIELDS"
+	SORT     TokenType = "SORT"
+	ASC      TokenType = "ASC"
+	DESC     TokenType = "DESC"
+	COLOR    TokenType = "COLOR"
+	UNIQ     TokenType = "UNIQ"
+	QUIET    TokenType = "QUIET"
+	LIMIT    TokenType = "LIMIT"
+	TABLE    TokenType = "TABLE"
+	DEFAULT  TokenType = "DEFAULT"
+	MARKDOWN TokenType = "MARKDOWN"
+	TRUNCATE TokenType = "TRUNCATE"
 
 	EOF TokenType = "EOF"
 )

@@ -2,8 +2,10 @@ package core
 
 import (
 	"fmt"
+	tblwriter "github.com/amterp/go-tbl"
 	"github.com/samber/lo"
 	"github.com/scylladb/go-set/strset"
+	"regexp"
 )
 
 type RadBlockInterpreter struct {
@@ -96,6 +98,12 @@ type radInvocation struct {
 	fieldsToNotPrint *strset.Set
 	sorting          []ColumnSort
 	colToTruncate    map[string]int64
+	colToColor       map[string]radColorMod
+}
+
+type radColorMod struct {
+	color tblwriter.Color
+	regex *regexp.Regexp
 }
 
 func (r *radInvocation) execute() {
@@ -194,7 +202,36 @@ type fieldModVisitor struct {
 
 func (f fieldModVisitor) VisitTruncateRadFieldModStmt(truncate Truncate) {
 	truncLen := truncate.Value.Accept(f.invocation.ri.i)
-	for _, identifier := range f.identifiers {
-		f.invocation.colToTruncate[identifier.GetLexeme()] = truncLen.(int64)
+	switch coerced := truncLen.(type) {
+	case int64:
+		for _, identifier := range f.identifiers {
+			f.invocation.colToTruncate[identifier.GetLexeme()] = coerced
+		}
+	default:
+		f.invocation.ri.i.error(truncate.TruncToken, "Truncate value must be an integer")
+	}
+}
+
+func (f fieldModVisitor) VisitColorRadFieldModStmt(color Color) {
+	colorValue := color.ColorValue.Accept(f.invocation.ri.i)
+	switch coerced := colorValue.(type) {
+	case string:
+		coercedColor, ok := ColorFromString(coerced)
+		if !ok {
+			f.invocation.ri.i.error(color.ColorToken, fmt.Sprintf("Invalid color value. Allowed: %s", COLORS))
+		}
+		regex := color.Regex.Accept(f.invocation.ri.i)
+		switch coercedRegex := regex.(type) {
+		case string:
+			regex, err := regexp.Compile(coercedRegex)
+			if err == nil {
+				f.invocation.ri.i.error(color.ColorToken, fmt.Sprintf("Error compiling regex pattern: %s", err))
+			}
+			for _, identifier := range f.identifiers {
+				f.invocation.colToColor[identifier.GetLexeme()] = radColorMod{color: coercedColor, regex: regex}
+			}
+		}
+	default:
+		f.invocation.ri.i.error(color.ColorToken, "Color value must be a string")
 	}
 }
